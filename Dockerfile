@@ -1,5 +1,5 @@
 # Build em uma imagem temporária - Node 16 para compatibilidade
-FROM node:16-alpine as builder
+FROM node:20-alpine as build-stage
 
 WORKDIR /build
 
