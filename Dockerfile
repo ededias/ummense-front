@@ -1,56 +1,29 @@
-# Build stage
-FROM node:20-alpine as build-stage
+# Build em uma imagem temporária
+FROM node:18-alpine as builder
+
+WORKDIR /build
+
+# Copiar e instalar apenas o necessário para build
+COPY package*.json ./
+RUN npm ci
+
+# Build da aplicação
+COPY . .
+RUN npm run build
+
+# Imagem final super leve
+FROM node:18-alpine
 
 WORKDIR /app
 
-# Instalar dependências do sistema necessárias
-RUN apk add --no-cache \
-    python3 \
-    make \
-    g++ \
-    git \
-    && rm -rf /var/cache/apk/*
+# Instalar apenas http-server (mais leve que serve)
+RUN npm install -g http-server
 
-# Copiar package files
-COPY package*.json ./
+# Copiar apenas os arquivos dist
+COPY --from=builder /build/dist ./
 
-# Instalar todas as dependências (incluindo devDependencies para o build)
-RUN npm ci
+# Railway usa a variável PORT
+EXPOSE $PORT
 
-# Copiar código fonte
-COPY . .
-
-# Fazer o build
-RUN npm run build
-
-# Verificar se o build foi criado
-RUN test -f dist/index.html || (echo "Build failed - no index.html found" && exit 1)
-
-# Production stage
-FROM nginx:1.25-alpine as production-stage
-
-# Copiar configuração customizada
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copiar arquivos buildados
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-
-# Criar usuário não-root
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nextjs -u 1001
-
-# Ajustar permissões
-RUN chown -R 1001:1001 /usr/share/nginx/html && \
-    chown -R 1001:1001 /var/cache/nginx && \
-    chown -R 1001:1001 /var/log/nginx && \
-    chown -R 1001:1001 /etc/nginx/conf.d
-
-# Criar diretório para pid
-RUN touch /var/run/nginx.pid && \
-    chown -R 1001:1001 /var/run/nginx.pid
-
-USER 1001
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+# Comando simples e eficiente
+CMD http-server . -p $PORT -c-1 --cors
