@@ -3,7 +3,7 @@ FROM node:20-alpine as build-stage
 
 WORKDIR /build
 
-# Copiar e instalar apenas o necessário para build
+# Copiar e instalar dependências
 COPY package*.json ./
 RUN npm ci
 
@@ -11,19 +11,19 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-# Imagem final com Node 20
+
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Instalar apenas http-server (mais leve que serve)
+# Instalar servidor estático leve
 RUN npm install -g http-server
 
-# Copiar apenas os arquivos dist
-COPY --from=builder /build/dist ./
+# Copiar apenas os arquivos de build
+COPY --from=build-stage /build/dist ./dist
 
-# Railway usa a variável PORT
-EXPOSE $PORT
+# Porta padrão (Railway sobrescreve com $PORT)
+EXPOSE 8080
 
-# Comando simples e eficiente
-CMD http-server . -p $PORT -c-1 --cors
+# Comando de execução
+CMD ["http-server", "dist", "-p", "${PORT:-8080}", "-c-1", "--cors"]
