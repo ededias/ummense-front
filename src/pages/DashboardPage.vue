@@ -17,7 +17,7 @@ onMounted(() => {
 async function handleme() {
   error.value = ''
   try {
-   await getUser()
+    await getUser()
     
     router.push('/')
   } catch (err: any) {
