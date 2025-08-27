@@ -14,8 +14,8 @@ RUN apk add --no-cache \
 # Copiar package files
 COPY package*.json ./
 
-# Instalar dependências com npm ci para builds determinísticos
-RUN npm ci --only=production
+# Instalar todas as dependências (incluindo devDependencies para o build)
+RUN npm ci
 
 # Copiar código fonte
 COPY . .
