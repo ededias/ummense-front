@@ -26,4 +26,4 @@ COPY --from=build-stage /build/dist ./dist
 EXPOSE 8080
 
 # Comando de execução
-CMD ["http-server", "dist", "-p", "${PORT:-8080}", "-c-1", "--cors"]
+CMD ["http-server", "dist", "-p", "8080", "-c-1", "--cors"]
