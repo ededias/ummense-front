@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ref } from 'vue'
 
 const users = ref([])
-
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost'
 export function useUsers() {
   const fetchUsers = async () => {
   
