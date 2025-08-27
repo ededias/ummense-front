@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Development service
+  vue-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vue3-dev
+    ports:
+      - "3000:3000"  # Vue dev server port
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - NODE_OPTIONS=--openssl-legacy-provider
+      - CHOKIDAR_USEPOLLING=true  # For hot reload on Windows/WSL
+    command: npm run dev
+    networks:
+      - vue-network
+
+  # Production service
+  vue-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: vue3-prod
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+      - NODE_OPTIONS=--openssl-legacy-provider
+    networks:
+      - vue-network
+    profiles:
+      - production
+
+networks:
+  vue-network:
+    driver: bridge
+
+volumes:
+  node_modules:

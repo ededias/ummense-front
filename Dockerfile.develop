@@ -1,0 +1,30 @@
+# Development Dockerfile
+FROM node:20-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies for crypto support
+RUN apk add --no-cache python3 make g++
+
+# Copy package files
+COPY package*.json ./
+
+# Set npm config for legacy peer deps (helps with compatibility)
+RUN npm config set legacy-peer-deps true
+
+# Install dependencies
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Set environment variables for crypto compatibility
+ENV NODE_OPTIONS="--openssl-legacy-provider"
+ENV NODE_ENV=development
+
+# Expose port
+EXPOSE 3000
+
+# Start development server
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
