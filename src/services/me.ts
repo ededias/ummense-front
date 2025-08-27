@@ -3,7 +3,7 @@ axios.defaults.baseURL = 'http://localhost' // ajuste conforme sua porta
 axios.defaults.withCredentials = true
 export async function getUser() {
   try {
-    const response = await axios.get('/api/user/1', {
+    await axios.get('/api/user/1', {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

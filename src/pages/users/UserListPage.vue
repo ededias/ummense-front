@@ -9,7 +9,6 @@
       confirm-text="Excluir"
       cancel-text="Cancelar"
       @confirm="deleteUser"
-      @cancel="acknowledgeExclusion"
     />
 
     <!-- Header -->
@@ -184,7 +183,7 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ user.name }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.email }}</td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <span v-for="role in user.roles" :key="role" :class="getRoleBadgeClass(role.name)"
+                    <span v-for="role in user.roles" :key="role.id" :class="getRoleBadgeClass(role.name)"
                       class="inline-flex px-2 py-1 text-xs font-semibold rounded-full">
                       {{ role.name }}
                     </span>
@@ -226,7 +225,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive, onUpdated } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import {
   User,
   Trash2,

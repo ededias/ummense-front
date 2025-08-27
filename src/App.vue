@@ -33,28 +33,22 @@ const user = ref({
 
 
 const isMobileMenuOpen = ref(false);
-const isCollapsed = ref(false);
+
 
 const route = useRoute()
 const shouldShowLayout = computed(() => !route.meta.hideLayout)
 
 const toggleMobileMenu = (isOpen: boolean) => {
   isMobileMenuOpen.value = isOpen;
-
-  // Aqui você pode adicionar lógica adicional, como redirecionar o usuário ou exibir
-  // um alerta, etc.
 };
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false;
-
-  // Aqui você pode adicionar lógica adicional, como redirecionar o usuário ou exibir
-  // um alerta, etc.
 }
 
-const logoutUser = (logoutAction: any) => {
+const logoutUser = () => {
 
-  // Aqui você pode adicionar lógica adicional, como redirecionar o usuário ou exibir
+
   logout();
   router.push('/login')
 };
@@ -63,19 +57,12 @@ const logoutUser = (logoutAction: any) => {
 const isMobile = ref(false)
 
 const updateScreen = () => {
-  isMobile.value = window.innerWidth < 1024 // Tailwind's "lg"
+  isMobile.value = window.innerWidth < 1024
 }
-
-// onBeforeUnmount(() => {
-//   // window.removeEventListener('resize', updateScreen)
-// })
-
 
 
 onMounted(async () => {
   
-
-
   updateScreen()
   window.addEventListener('resize', updateScreen)
 

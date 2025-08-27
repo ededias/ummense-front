@@ -101,43 +101,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import {
     Home,
     Users,
-    BarChart3,
-    Settings,
-    FileText,
-    ShoppingCart,
-    Package,
-    Calendar,
-    Mail,
-    HelpCircle,
     ChevronDown,
     ChevronLeft,
-    Menu,
     User
 } from 'lucide-vue-next'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const router = useRouter()
+
 
 
 // Icon aliases
 const HomeIcon = Home
 const UsersIcon = Users
-const BarChartIcon = BarChart3
-const SettingsIcon = Settings
-const FileTextIcon = FileText
-const ShoppingCartIcon = ShoppingCart
-const PackageIcon = Package
-const CalendarIcon = Calendar
-const MailIcon = Mail
-const HelpCircleIcon = HelpCircle
 const ChevronDownIcon = ChevronDown
 const ChevronLeftIcon = ChevronLeft
-const MenuIcon = Menu
 const UserIcon = User
 
 // Types
@@ -178,7 +160,6 @@ const props = withDefaults(defineProps<Props>(), {
 const isCollapsed = ref(props.closeMenu)
 const isMobileMenuOpen = ref(props.menuOpened)
 const openDropdowns = ref<string[]>([])
-const currentRoute = ref('/dashboard')
 const emit = defineEmits(['is-opened-mobile-menu']);
 
 // Navigation items
@@ -205,10 +186,6 @@ const toggleSidebar = () => {
     }
 }
 
-
-const closeMobileMenu = () => {
-    isMobileMenuOpen.value = false
-}
 
 const toggleDropdown = (itemId: string) => {
     if (isCollapsed.value) return
@@ -240,11 +217,6 @@ const hasActiveChild = (item: NavItem) => {
     return item.children.some(child => isActiveRoute(child.path))
 }
 
-// Simulated route change (replace with actual router)
-const navigateToRoute = (path: string) => {
-    router.push(path)
-    closeMobileMenu()
-}
 
 // Handle responsive behavior
 onMounted(() => {

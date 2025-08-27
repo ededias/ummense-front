@@ -5,7 +5,7 @@ services:
   vue-dev:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.develop
     container_name: vue3-dev
     ports:
       - "3000:3000"  # Vue dev server port

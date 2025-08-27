@@ -132,7 +132,8 @@ const handleMenuItemClick = (action: string) => {
 };
 
 const handleClickOutside = (event: MouseEvent) => {
-    if (menuRef.value && !menuRef.value.contains(event.target)) {
+    const menuEl = menuRef.value as HTMLElement | null;
+    if (menuEl && !menuEl.contains(event.target as Node)) {
         isMenuOpen.value = false;
     }
 };

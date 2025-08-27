@@ -7,8 +7,6 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getUser } from '../services/me.ts'
 
-const email = ref('')
-const password = ref('')
 const error = ref('')
 const router = useRouter()
 
@@ -19,7 +17,7 @@ onMounted(() => {
 async function handleme() {
   error.value = ''
   try {
-    const data = await getUser()
+   await getUser()
     
     router.push('/')
   } catch (err: any) {
