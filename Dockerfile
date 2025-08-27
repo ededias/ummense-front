@@ -1,5 +1,5 @@
-# Build em uma imagem temporária
-FROM node:18-alpine as builder
+# Build em uma imagem temporária - Node 16 para compatibilidade
+FROM node:16-alpine as builder
 
 WORKDIR /build
 
@@ -11,8 +11,8 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-# Imagem final super leve
-FROM node:18-alpine
+# Imagem final com Node 16
+FROM node:16-alpine
 
 WORKDIR /app
 
